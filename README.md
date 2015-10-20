@@ -1,14 +1,17 @@
-#osx-docker-mysql, a.k.a dgraziotin/mysql
+#Custom version of osx-docker-mysql (a.k.a dgraziotin/mysql)
 
     Out-of-the-box MySQL Docker image that *just works* on Mac OS X.
     Including write support for mounted volumes (MySQL).
     No matter if using the official boot2docker or having Vagrant in the stack, as well.
 
-osx-docker-mysql, which is known as 
-[dgraziotin/mysql](https://registry.hub.docker.com/u/dgraziotin/mysql/) 
-in the Docker Hub, is a reduced fork of 
-[dgraziotin/osx-docker-lamp](https://github.com/dgraziotin/osx-docker-lamp), 
-which is an "Out-of-the-box LAMP image (PHP+MySQL) for Docker". 
+My customizations for now just include using `UTF8` as default charset and collation for the new database,
+and are available on [edgargonzalez/mysql-osx](https://registry.hub.docker.com/u/edgargonzalez/mysql-osx/)
+
+osx-docker-mysql, which is known as
+[dgraziotin/mysql](https://registry.hub.docker.com/u/dgraziotin/mysql/)
+in the Docker Hub, is a reduced fork of
+[dgraziotin/osx-docker-lamp](https://github.com/dgraziotin/osx-docker-lamp),
+which is an "Out-of-the-box LAMP image (PHP+MySQL) for Docker".
 
 Some info about osx-docker-mysql:
 
@@ -21,11 +24,12 @@ Some info about osx-docker-mysql:
 - If `CREATE_MYSQL_BASIC_USER_AND_DB="true"`, it creates a default database and user with permissions to that database
 - It is documented for less advanced users (like me)
 
+
 ##Usage
 
     If using Vagrant, please see the extra steps in the next subsection.
 
-If you need to create a custom image `youruser/mysql`, 
+If you need to create a custom image `youruser/mysql`,
 execute the following command from the `osx-docker-mysql` source folder:
 
     docker build -t youruser/mysql .
@@ -34,10 +38,10 @@ If you wish, you can push your new image to the registry:
 
     docker push youruser/mysql
 
-Otherwise, you are free to use dgraziotin/mysql as it is provided. Remember first
+Otherwise, you are free to use edgargonzalez/mysql-osx as it is provided. Remember first
 to pull it from the Docker Hub:
 
-    docker pull dgraziotin/mysql
+    docker pull edgargonzalez/mysql-osx
 
 ###Vagrant
 
@@ -53,7 +57,7 @@ See the Environment variables section for more options.
 
 If you start the image without supplying your code, e.g.,
 
-    docker run -t -i -p 3306:3306 --name db dgraziotin/mysql
+    docker run -t -i -p 3306:3306 --name db edgargonzalez/mysql-osx
 
 At [boot2docker ip] you should be able to connect to MySQL.
 
@@ -62,7 +66,7 @@ At [boot2docker ip] you should be able to connect to MySQL.
 If you wish to mount a MySQL folder locally, so that MySQL files are saved on your
 OS X machine, run the following instead:
 
-    docker run -i -t -p "3306:3306" -v ${PWD}/mysql:/mysql --name db dgraziotin/mysql
+    docker run -i -t -p "3306:3306" -v ${PWD}/mysql:/mysql --name db edgargonzalez/mysql-osx
 
 The MySQL database will thus become persistent at each subsequent run of your image.
 
@@ -71,7 +75,7 @@ The MySQL database will thus become persistent at each subsequent run of your im
 ###The /mysql folder
 
 MySQL is configured to serve the files from the `/mysql` folder, which is a symbolic
-link to `/var/lib/mysql`. In osx-docker-mysql, the MySQL user `mysql` 
+link to `/var/lib/mysql`. In osx-docker-mysql, the MySQL user `mysql`
 has full write permissions to the `mysql` folder.
 
 ###MySQL
@@ -84,11 +88,11 @@ The bundled MySQL server has two users, that are `root` and `admin`, and an opti
 third user `user`.
 
 The `root` account comes with an empty password, and it is for local connections
-(e.g., using some code). The `root` user cannot remotely access the database 
+(e.g., using some code). The `root` user cannot remotely access the database
 (and the container).
 
-However, the first time that you run your container, a new user `admin` 
-with all root privileges  will be created in MySQL with a random password. 
+However, the first time that you run your container, a new user `admin`
+with all root privileges  will be created in MySQL with a random password.
 
 To get the password, check the logs of the container by running:
 
